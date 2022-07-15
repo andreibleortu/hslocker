@@ -1,5 +1,5 @@
 # hslocker
-Little CLI tool for managing the keys for my HS class' lockers. Only works on Windows.
+CLI tool for managing the keys for my HS class' lockers. Only works on Windows.
 
 ## Input format
 It's supposed to be a CSV formatted file, but Excel used ";" as the separator, so that's what it accepts. It reads values in the following format:
