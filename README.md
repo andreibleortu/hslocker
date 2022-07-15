@@ -1,8 +1,8 @@
 # hslocker
-Little CLI tool for managing the keys for my HS class' lockers. Only works on Windows.
+CLI tool for managing the keys for my HS class' lockers. Only works on Windows.
 
 ## Input format
-It's supposed to be a CSV formatted file, but Excel used ";" as the separator, so that's what it accepts. It reads values in the following format:
+It's similar to a CSV file, except the separator is `;`. File must be named `lockers.txt`. It reads values in the following format:
 ```
 Student name;Has/doesn't have/never got key;Locker no.;Pair (if any)
 ```
