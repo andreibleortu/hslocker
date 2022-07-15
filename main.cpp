@@ -5,8 +5,8 @@
 #include <cstring>
 using namespace std;
 
-ifstream fin("11F.txt");
-ofstream fout("11F.tmp");
+ifstream fin("lockers.txt");
+ofstream fout("lockers.tmp");
 int n, nameLenMax;
 int opt;
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -132,8 +132,8 @@ void writeToFile(int i)
 		fout << hsClass[i].nume << ';' << hsClass[i].hasKey << ';' << hsClass[i].lockerNo << ';' << hsClass[i].pair << '\n';
 		fin.close();
 		fout.close();
-		system("del 11F.txt");
-		system("copy 11F.tmp 11F.txt");
+		system("del lockers.txt");
+		system("copy lockers.tmp lockers.txt");
 	}
 	if (i <= n)
 	{
