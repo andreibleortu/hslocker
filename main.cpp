@@ -8,9 +8,10 @@ using namespace std;
 ifstream fin("11F.txt");
 ofstream fout("11F.tmp");
 int n, nameLenMax;
+int opt;
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-struct elev
+struct stdt
 {
 	char nume[80];
 	int hasKey;
@@ -140,13 +141,13 @@ void writeToFile(int i)
 		writeToFile(i + 1);
 	}
 }
-void syncPereche(int orig, int dest)
+void syncPair(int orig, int dest)
 {
 	hsClass[dest].hasKey = hsClass[orig].hasKey;
 	hsClass[dest].lockerNo = hsClass[orig].lockerNo;
 	hsClass[dest].pair = orig;
 }
-void addCheie()
+void addKey()
 {
 	int indexModif, dulapModif, perecheModif;
 	cout << endl
@@ -170,7 +171,7 @@ void addCheie()
 			 << flush;
 		cin >> perecheModif;
 		hsClass[indexModif].pair = perecheModif;
-		syncPereche(indexModif, perecheModif);
+		syncPair(indexModif, perecheModif);
 	}
 }
 void removeKey()
@@ -184,7 +185,7 @@ void removeKey()
 	hsClass[indexModif].lockerNo = 0;
 	if (hsClass[indexModif].pair != 0)
 	{
-		syncPereche(indexModif, hsClass[indexModif].pair);
+		syncPair(indexModif, hsClass[indexModif].pair);
 		hsClass[hsClass[indexModif].pair].pair = 0;
 		hsClass[indexModif].pair = 0;
 	}
@@ -204,9 +205,9 @@ void markNone()
 {
 	cout << "Input student no." << endl
 		 << flush;
-	int elev;
-	cin >> elev;
-	hsClass[elev].hasKey = 2;
+	int stdt;
+	cin >> stdt;
+	hsClass[stdt].hasKey = 2;
 }
 
 void showNoKey(int i)
@@ -247,7 +248,7 @@ void announceOptions()
 		 << "5. Write and exit" << endl
 		 << flush;
 }
-int opt;
+
 int main()
 {
 	cls();
@@ -261,7 +262,7 @@ int main()
 		cin >> opt;
 		if (opt == 1)
 		{
-			addCheie();
+			addKey();
 		}
 		else if (opt == 2)
 		{
