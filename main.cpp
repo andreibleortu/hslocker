@@ -13,42 +13,42 @@ HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 struct elev
 {
 	char nume[80];
-	int areCheie;
-	int nrDulap, pereche;
-} c11F[40];
+	int hasKey;
+	int lockerNo, pair;
+} hsClass[40];
 
 void cls()
 {
 	system("CLS");
 }
-void fillElev(char line[80], int crt)
+void fillStd(char line[80], int crt)
 {
 	int i = 0;
 	while (line[i] != ';')
 	{
-		c11F[crt].nume[i] = line[i];
+		hsClass[crt].nume[i] = line[i];
 		i++;
 	}
-	c11F[crt].nume[i + 1] = '\0';
-	int crtNameLen = strlen(c11F[crt].nume);
+	hsClass[crt].nume[i + 1] = '\0';
+	int crtNameLen = strlen(hsClass[crt].nume);
 	if (nameLenMax < crtNameLen)
 	{
 		nameLenMax = crtNameLen;
 	}
 	i++;
-	c11F[crt].areCheie = line[i] - '0';
+	hsClass[crt].hasKey = line[i] - '0';
 	i++;
-	c11F[crt].nrDulap = atoi(strtok(line + i, ";"));
+	hsClass[crt].lockerNo = atoi(strtok(line + i, ";"));
 	i = i + 3;
-	if (c11F[crt].nrDulap > 9 && c11F[crt].nrDulap < 100)
+	if (hsClass[crt].lockerNo > 9 && hsClass[crt].lockerNo < 100)
 	{
 		i++;
 	}
-	if (c11F[crt].nrDulap > 99)
+	if (hsClass[crt].lockerNo > 99)
 	{
 		i++;
 	}
-	c11F[crt].pereche = atoi(strtok(line + i, "\n"));
+	hsClass[crt].pair = atoi(strtok(line + i, "\n"));
 }
 
 void importDB(int i)
@@ -57,7 +57,7 @@ void importDB(int i)
 	{
 		char linie[100];
 		fin.getline(linie, 100);
-		fillElev(linie, i);
+		fillStd(linie, i);
 		importDB(i + 1);
 	}
 }
@@ -71,11 +71,11 @@ void outputDB(int i)
 	}
 	if (i <= n)
 	{
-		if (c11F[i].areCheie == 1)
+		if (hsClass[i].hasKey == 1)
 		{
 			SetConsoleTextAttribute(hConsole, 10);
 		}
-		else if (c11F[i].areCheie == 0)
+		else if (hsClass[i].hasKey == 0)
 		{
 			SetConsoleTextAttribute(hConsole, 12);
 		}
@@ -84,32 +84,32 @@ void outputDB(int i)
 			SetConsoleTextAttribute(hConsole, 15);
 		}
 		cout << right << setw(strlen("Index")) << i << " " << flush;
-		cout << left << setw(nameLenMax) << c11F[i].nume << flush;
-		if (c11F[i].areCheie == 2)
+		cout << left << setw(nameLenMax) << hsClass[i].nume << flush;
+		if (hsClass[i].hasKey == 2)
 		{
-			cout << right << setw(strlen("Are cheie")) << "none" << flush;
+			cout << right << setw(strlen("Key")) << "none" << flush;
 		}
 		else
 		{
-			cout << right << setw(strlen("Are cheie")) << c11F[i].areCheie << flush;
+			cout << right << setw(strlen("Key")) << hsClass[i].hasKey << flush;
 		}
-		if (!c11F[i].nrDulap)
+		if (!hsClass[i].lockerNo)
 		{
-			cout << right << setw(strlen("Nr. dulap")) << '-' << flush;
+			cout << right << setw(strlen("Locker no.")) << '-' << flush;
 		}
 		else
 		{
-			cout << right << setw(strlen("Nr. dulap")) << c11F[i].nrDulap << flush;
+			cout << right << setw(strlen("Locker no.")) << hsClass[i].lockerNo << flush;
 		}
 
-		if (!c11F[i].pereche)
+		if (!hsClass[i].pair)
 		{
-			cout << right << setw(strlen("Pereche")) << "-" << '\n'
+			cout << right << setw(strlen("Pair")) << "-" << '\n'
 				 << flush;
 		}
 		else
 		{
-			cout << right << setw(strlen("Pereche")) << c11F[i].pereche << '\n'
+			cout << right << setw(strlen("Pair")) << hsClass[i].pair << '\n'
 				 << flush;
 		}
 		outputDB(i + 1);
@@ -128,7 +128,7 @@ void writeToFile(int i)
 	}
 	if (i == n)
 	{
-		fout << c11F[i].nume << ';' << c11F[i].areCheie << ';' << c11F[i].nrDulap << ';' << c11F[i].pereche << '\n';
+		fout << hsClass[i].nume << ';' << hsClass[i].hasKey << ';' << hsClass[i].lockerNo << ';' << hsClass[i].pair << '\n';
 		fin.close();
 		fout.close();
 		system("del 11F.txt");
@@ -136,57 +136,57 @@ void writeToFile(int i)
 	}
 	if (i <= n)
 	{
-		fout << c11F[i].nume << ';' << c11F[i].areCheie << ';' << c11F[i].nrDulap << ';' << c11F[i].pereche << '\n';
+		fout << hsClass[i].nume << ';' << hsClass[i].hasKey << ';' << hsClass[i].lockerNo << ';' << hsClass[i].pair << '\n';
 		writeToFile(i + 1);
 	}
 }
 void syncPereche(int orig, int dest)
 {
-	c11F[dest].areCheie = c11F[orig].areCheie;
-	c11F[dest].nrDulap = c11F[orig].nrDulap;
-	c11F[dest].pereche = orig;
+	hsClass[dest].hasKey = hsClass[orig].hasKey;
+	hsClass[dest].lockerNo = hsClass[orig].lockerNo;
+	hsClass[dest].pair = orig;
 }
 void addCheie()
 {
 	int indexModif, dulapModif, perecheModif;
 	cout << endl
-		 << "Introdu indexul elevului" << endl
+		 << "Input student no." << endl
 		 << flush;
 	cin >> indexModif;
-	c11F[indexModif].areCheie = 1;
+	hsClass[indexModif].hasKey = 1;
 	cout << endl
-		 << "Ce numar dulap?" << endl
+		 << "Which locker no.?" << endl
 		 << flush;
 	cin >> dulapModif;
-	c11F[indexModif].nrDulap = dulapModif;
+	hsClass[indexModif].lockerNo = dulapModif;
 	cout << endl
-		 << "Are pereche? (y/n)" << endl
+		 << "Has a key (y/n)" << endl
 		 << flush;
 	char arePereche;
 	cin >> arePereche;
 	if (arePereche == 'y')
 	{
-		cout << "Introdu perechea elevului" << endl
+		cout << "Enter student's pair" << endl
 			 << flush;
 		cin >> perecheModif;
-		c11F[indexModif].pereche = perecheModif;
+		hsClass[indexModif].pair = perecheModif;
 		syncPereche(indexModif, perecheModif);
 	}
 }
-void removeCheie()
+void removeKey()
 {
 	int indexModif;
 	cout << endl
-		 << "Introdu index elev" << endl
+		 << "Input student no." << endl
 		 << flush;
 	cin >> indexModif;
-	c11F[indexModif].areCheie = 0;
-	c11F[indexModif].nrDulap = 0;
-	if (c11F[indexModif].pereche != 0)
+	hsClass[indexModif].hasKey = 0;
+	hsClass[indexModif].lockerNo = 0;
+	if (hsClass[indexModif].pair != 0)
 	{
-		syncPereche(indexModif, c11F[indexModif].pereche);
-		c11F[c11F[indexModif].pereche].pereche = 0;
-		c11F[indexModif].pereche = 0;
+		syncPereche(indexModif, hsClass[indexModif].pair);
+		hsClass[hsClass[indexModif].pair].pair = 0;
+		hsClass[indexModif].pair = 0;
 	}
 }
 
@@ -194,19 +194,19 @@ void zeroAll(int i)
 {
 	if (i <= n)
 	{
-		c11F[i].areCheie = 0;
-		c11F[i].nrDulap = 0;
-		c11F[i].pereche = 0;
+		hsClass[i].hasKey = 0;
+		hsClass[i].lockerNo = 0;
+		hsClass[i].pair = 0;
 		zeroAll(i + 1);
 	}
 }
 void markNone()
 {
-	cout << "Introdu index elev" << endl
+	cout << "Input student no." << endl
 		 << flush;
 	int elev;
 	cin >> elev;
-	c11F[elev].areCheie = 2;
+	hsClass[elev].hasKey = 2;
 }
 
 void showNoKey(int i)
@@ -214,19 +214,19 @@ void showNoKey(int i)
 	if (i == 1)
 	{
 		cls();
-		cout << right << setw(strlen("Index")) << "Index " << left << setw(nameLenMax) << "Nume " << right << setw(strlen("Are cheie")) << "Are cheie " << setw(strlen("Nr. dulap")) << "Nr. dulap " << setw(strlen("Pereche")) << "Pereche" << '\n'
+		cout << right << setw(strlen("Index")) << "Index " << left << setw(nameLenMax) << "Name " << right << setw(strlen("Key")) << "Key " << setw(strlen("Locker no.")) << "Locker no. " << setw(strlen("Pair")) << "Pair" << '\n'
 			 << flush;
 	}
 	if (i <= n)
 	{
-		if (c11F[i].areCheie == 0)
+		if (hsClass[i].hasKey == 0)
 		{
 			SetConsoleTextAttribute(hConsole, 12);
 			cout << right << setw(strlen("Index")) << i << " " << flush;
-			cout << left << setw(nameLenMax) << c11F[i].nume << flush;
-			cout << right << setw(strlen("Are cheie")) << c11F[i].areCheie << flush;
-			cout << right << setw(strlen("Nr. dulap")) << '-' << flush;
-			cout << right << setw(strlen("Pereche")) << "-" << '\n'
+			cout << left << setw(nameLenMax) << hsClass[i].nume << flush;
+			cout << right << setw(strlen("Key")) << hsClass[i].hasKey << flush;
+			cout << right << setw(strlen("Locker no.")) << '-' << flush;
+			cout << right << setw(strlen("Pair")) << "-" << '\n'
 				 << flush;
 		}
 		showNoKey(i + 1);
@@ -240,10 +240,10 @@ void showNoKey(int i)
 void announceOptions()
 {
 	cout << endl
-		 << "1. Adauga cheie" << endl
-		 << "2. Scoate cheie" << endl
-		 << "3. Nu a primit cheie" << endl
-		 << "4. Arata cine nu a adus" << endl
+		 << "1. Add key" << endl
+		 << "2. Remove key" << endl
+		 << "3. Never received key" << endl
+		 << "4. Show students with no key" << endl
 		 << "5. Write and exit" << endl
 		 << flush;
 }
@@ -265,7 +265,7 @@ int main()
 		}
 		else if (opt == 2)
 		{
-			removeCheie();
+			removeKey();
 		}
 		else if (opt == 3)
 		{
